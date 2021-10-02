@@ -1,0 +1,6 @@
+.DS_Store
+.vscode/
+known_hosts
+
+# Secrets file
+deluminator_secrets.h
