@@ -166,7 +166,7 @@ void loop() {
           {
             nearer_lights->update_all_lights_status(LightStatus::OFF);
             delay(1000);
-            grab_lights(true);
+            grab_lights();
             deluminator_lights += 1;
           }
         }
@@ -180,8 +180,8 @@ void loop() {
           {
             nearer_lights->update_all_lights_status(LightStatus::ON);
             delay(1500);
-            deluminator_lights -=1;
-            return_lights(true);
+            deluminator_lights -= 1;
+            return_lights();
           }
         }
       }
@@ -194,14 +194,7 @@ void loop() {
           {
             next_light->status = LightStatus::OFF;
             delay(1200);
-            if (nearer_lights->are_all_off())
-            {
-              grab_lights(true);
-            }
-            else
-            {
-              grab_lights(false);
-            }
+            grab_lights();
             deluminator_lights += 1;
           }
           else
@@ -216,14 +209,7 @@ void loop() {
             next_light->status = LightStatus::ON;
             delay(1000);
             deluminator_lights -= 1;
-            if (nearer_lights->are_all_on())
-            {
-              return_lights(true);
-            }
-            else
-            {
-              return_lights(false);
-            }
+              return_lights();
           }
           else
           {
@@ -254,7 +240,7 @@ void blink_lights(uint32_t color)
   }
 }
 
-void grab_lights(bool all_lights)
+void grab_lights()
 {
   strip.setPixelColor(1, strip.Color(0,0,0,255)); //  Set pixel's color (in RAM)
   strip.show();                          //  Update strip to match
@@ -276,7 +262,7 @@ void grab_lights(bool all_lights)
   strip.show();
 }
 
-void return_lights(bool all_lights)
+void return_lights()
 {
   // Fade out 
   for(float rad = 1.57; rad <= 3.14; rad += 0.04)
@@ -309,7 +295,7 @@ void scanBLEDevices()
 {
   if (millis() - last_scanned_timestamp < SCAN_INTERVAL)
   {
-    // Assume we're in the same room if last checked within 15 seconds
+    // Assume we're in the same room if last checked within SCAN_INTERVAL seconds
     return;
   }
   BLEDevice::init("");
